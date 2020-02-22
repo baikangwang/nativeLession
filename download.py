@@ -6,8 +6,9 @@ import re
 # "开满鲜花的小路", "mda-idtxx52mgg44d33q"
 # "找春天", "mda-ieggwi5sw55svpy9"
 # "古诗两首", "mda-jdupxkse9ysti4n0"
-lesson_name = "古诗两首"
-menu_name = 'mda-jdupxkse9ysti4n0'
+# "雷锋叔叔你在哪", "mda-ieswq30pdzpktv64"
+lesson_name = "雷锋叔叔你在哪"
+menu_name = 'mda-ieswq30pdzpktv64'
 # 创建课时目录
 lesson_dir=os.path.join(os.path.dirname(os.path.abspath("__file__")),lesson_name)
 if not os.path.exists(lesson_dir):
@@ -78,7 +79,7 @@ def merge(menu_file,lesson_dir):
     # 打开cmd, 执行命令 copy /b *.ts merged.ts
     
 # 1. 下载
-# download(menu_name,menu_file,lesson_dir)
+download(menu_name,menu_file,lesson_dir)
 # 2. h二饼
 merge(menu_file,lesson_dir)
     
