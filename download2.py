@@ -1,16 +1,21 @@
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import os
 import shutil
 import re
-# "邓小平爷爷植树", "mda-jdhjbb36a3xtft3s"
-# "开满鲜花的小路", "mda-idtxx52mgg44d33q"
-# "找春天", "mda-ieggwi5sw55svpy9"
-# "古诗两首", "mda-jdupxkse9ysti4n0"
-# "雷锋叔叔你在哪", "mda-ieswq30pdzpktv64"
-# "千人糕1", "mda-ieuv5536pyhefa3q"
-# "千人糕2","mda-id9m1nc8j9dy8hmt"
-lesson_name = "千人糕2"
-menu_name = 'mda-id9m1nc8j9dy8hmt'
+# "41", "hong.tianzhen-zuida.com", "20200221/20609_52e1492c/1000k/hls"
+# "42", "20200221/20608_16f2ac5a"
+# "43", "20200227/20964_0d9e6d80"
+# "44", "20200227/3698_5e2b3ad0"
+# "45", "mda-ieswq30pdzpktv64"
+# "46", "mda-ieuv5536pyhefa3q"
+# "47", "mda-id9m1nc8j9dy8hmt"
+# "48", "mda-id9m1nc8j9dy8hmt"
+lesson_name = "41"
+menu_name = "20200221/20609_52e1492c/1000k/hls"
+host = "hong.tianzhen-zuida.com"
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # 创建课时目录
 lesson_dir=os.path.join(os.path.dirname(os.path.abspath("__file__")),lesson_name)
 if not os.path.exists(lesson_dir):
@@ -18,7 +23,7 @@ if not os.path.exists(lesson_dir):
     print ("目录初始化完成")
 else:
     print ("目录已初始化")
-menu_file = os.path.join(lesson_dir,'{}.m3u8'.format(menu_name))
+menu_file = os.path.join(lesson_dir,'index.m3u8')
 
 def load(menu_file):
     file_names=[]
@@ -34,9 +39,8 @@ def load(menu_file):
     fin.close()
     return file_names
 
-def download(menu_name,menu_file,lesson_dir):
-    host = 'hknm5s6gzvm5a6wju24.exp.bcevod.com'
-    uri='http://{}/{}'.format(host,menu_name)
+def download(menu_name,menu_file,host,lesson_dir):
+    uri='https://{}/{}'.format(host,menu_name)
 
     file_names=load(menu_file)
 
@@ -44,9 +48,10 @@ def download(menu_name,menu_file,lesson_dir):
     for file_name in file_names:
         url = "{}/{}".format(uri,file_name)
         file=os.path.join(lesson_dir,file_name)
-        # print (url)
+        print (url)
         # print (file)
-        r = requests.get(url)
+        # requests.packages.urllib3.disable_warnings()
+        r = requests.get(url,timeout=30,verify=False)
         with open(file,"wb") as f:
             f.write(r.content)
         print (file_name,"下载完毕")
@@ -81,6 +86,6 @@ def merge(menu_file,lesson_dir):
     # 打开cmd, 执行命令 copy /b *.ts merged.ts
     
 # 1. 下载
-download(menu_name,menu_file,lesson_dir)
+download(menu_name,menu_file,host,lesson_dir)
 # 2. 合并
 merge(menu_file,lesson_dir)
